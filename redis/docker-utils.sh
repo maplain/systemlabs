@@ -8,7 +8,13 @@ start() {
 
 connect() {
 	id="$1"
-	docker exec -it "redis-${id}" /bin/bash
+	shift
+	cmd="$@"
+	if [ "${#@}" = "0" ]; then
+	  docker exec -it "redis-${id}" /bin/bash
+        else
+	  docker exec -it "redis-${id}" /bin/bash -c "${cmd}"
+	fi
 }
 
 ip() {
