@@ -3,7 +3,13 @@
 start() {
 	id="$1"
 	shift
-	docker run --rm -d -v $PWD/sentinel-"${id}".conf:/data/sentinel.conf --name "redis-${id}" -it redis:6.0.6 "${@}"
+	docker run --rm -d -v $PWD/sentinel-"${id}".conf:/data/sentinel.conf -v $PWD:/data -p $(( 6379 + ${id} )):6379 --name "redis-${id}" -it redis:6.0.6 "${@}"
+}
+
+run() {
+	id="$1"
+	shift
+	docker run --rm -v $PWD/sentinel-"${id}".conf:/data/sentinel.conf -v $PWD:/data -p $(( 6379 + ${id} )):6379 --name "redis-${id}" -it redis:6.0.6 "${@}"
 }
 
 connect() {
